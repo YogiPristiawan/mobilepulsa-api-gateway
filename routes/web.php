@@ -16,15 +16,11 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-// $router->get('/key', function () {
-//     return \Illuminate\Support\Str::random(32);
-// });
-
 
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('register', 'AuthController@register');
 
-    $router->group(['prefix' => 'transaksi'], function () use ($router) {
-        $router->get('balance', 'TransaksiController@balance');
+    $router->group(['prefix' => 'transaction'], function () use ($router) {
+        $router->get('balance', 'TransactionController@balance');
     });
 });

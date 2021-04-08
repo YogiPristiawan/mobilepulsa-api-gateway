@@ -38,6 +38,8 @@ $app->withEloquent();
 |
 */
 
+
+
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
     App\Exceptions\Handler::class
@@ -60,7 +62,7 @@ $app->singleton(
 */
 
 $app->configure('app');
-
+$app->configure('services');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware

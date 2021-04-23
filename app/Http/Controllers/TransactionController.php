@@ -27,18 +27,18 @@ class TransactionController extends Controller
 			if (isset($body->data->rc)) {
 				return response()->json([
 					'status' => [
-						'code' => 204,
+						'code' => $body->data->rc,
 						'message' => 'engga muncul broo'
 					]
-				], 204);
+				], $body->data->rc);
 			} else {
 				return response()->json([
 					'status' => [
-						'code' => 200,
+						'code' => $response->getStatusCode(),
 						'message' => 'Success'
 					],
 					'data' => $body->data
-				], 200);
+				], $response->getStatusCode());
 			}
 		} catch (ClientException $e) {
 			$err_status = json_decode($e->getResponse()->getStatusCode());
@@ -46,7 +46,7 @@ class TransactionController extends Controller
 
 			return response()->json([
 				'status' => [
-					'code' => $e->getResponse()->getStatusCode(),
+					'code' => $err_status,
 					'message' => $err_body->data->message
 				]
 			], $err_status);

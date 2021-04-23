@@ -17,29 +17,29 @@ class AuthController extends Controller
 			'email' => ['required', 'unique:App\Models\User,email'],
 			'password' => ['required']
 		]);
-		// try {
+		try {
 
-		$user->username = $request->input('username');
-		$user->email = $request->input('email');
-		$user->password = Crypt::encrypt($request->input('password'));
-		$user->save();
-		return response()->json([
-			'status' => [
-				'code' => 201,
-				'message' => 'User registered'
-			],
-			'user' => [
-				'username' => $request->input('username'),
-				'email' => $request->input('email')
-			]
-		], 201);
-		// } catch (\Exception $e) {
-		// 	return response()->json([
-		// 		'status' => [
-		// 			'code' => 500,
-		// 			'message' => 'Server Error'
-		// 		]
-		// 	], 500);
-		// }
+			$user->username = $request->input('username');
+			$user->email = $request->input('email');
+			$user->password = Crypt::encrypt($request->input('password'));
+			$user->save();
+			return response()->json([
+				'status' => [
+					'code' => 201,
+					'message' => 'User registered'
+				],
+				'user' => [
+					'username' => $request->input('username'),
+					'email' => $request->input('email')
+				]
+			], 201);
+		} catch (\Exception $e) {
+			return response()->json([
+				'status' => [
+					'code' => 500,
+					'message' => 'Server Error'
+				]
+			], 500);
+		}
 	}
 }

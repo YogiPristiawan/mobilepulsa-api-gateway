@@ -17,5 +17,13 @@ class TransactionService
 
 	public function balance()
 	{
+		$response = $this->post($this->base_uri, [
+			'json' => [
+				'commands' => 'balance',
+				'username' => config('mobilepulsa.username'),
+				'sign'	   => md5(config('mobilepulsa.username') . config('mobilepulsa.apiKey') . 'bl')
+			]
+		]);
+		return $response;
 	}
 }

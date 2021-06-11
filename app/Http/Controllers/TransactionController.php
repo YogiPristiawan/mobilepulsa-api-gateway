@@ -2,55 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use Illuminate\Http\Request;
+use GuzzleHttp\Exception\RequestException;
+use App\Service\TransactionService;
+use App\Traits\ResponseService;
 
 class TransactionController extends Controller
 {
+	use ResponseService;
+
+	protected $transactionService;
+
+	public function __construct(TransactionService $transactionService)
+	{
+		$this->transactionService = $transactionService;
+	}
+
 	public function balance()
 	{
-		// try {
-		// 	$client = new Client();
-		// 	$response = $client->request('POST', config('mobilepulsa.prepaidUrl'), [
-		// 		'json' => [
-		// 			'commands' => 'balance',
-		// 			'username' => '08813896779',
-		// 			'sign' => 'db1d14ff171dfcafb18311831bcd62fc'
-		// 		]
-		// 	]);
+		try {
+			$response = $this->transactionService->balance();
+			$data = json_decode($response->getBody())->data;
 
-		// 	$body = json_decode($response->getBody());
+			return $this->success(['data' => $data]);
+		} catch (RequestException $err) {
 
-		// 	/**
-		// 	 * sebenarnya kondisi ini ngga diperlukan, ini karena API Mobile pulsa ada bug yaitu response code 200 ketika Wrong Auth terjadi.
-		// 	 */
-		// 	if (isset($body->data->rc)) {
-		// 		return response()->json([
-		// 			'status' => [
-		// 				'code' => $body->data->rc,
-		// 				'message' => 'engga muncul broo'
-		// 			]
-		// 		], $body->data->rc);
-		// 	} else {
-		// 		return response()->json([
-		// 			'status' => [
-		// 				'code' => $response->getStatusCode(),
-		// 				'message' => 'Success'
-		// 			],
-		// 			'data' => $body->data
-		// 		], $response->getStatusCode());
-		// 	}
-		// } catch (ClientException $e) {
-		// 	$err_status = json_decode($e->getResponse()->getStatusCode());
-		// 	$err_body = json_decode($e->getResponse()->getBody());
-
-		// 	return response()->json([
-		// 		'status' => [
-		// 			'code' => $err_status,
-		// 			'message' => $err_body->data->message
-		// 		]
-		// 	], $err_status);
-		// }
+			return $this->serverError(['message' => $err->getMessage()]);
+		}
 	}
 }

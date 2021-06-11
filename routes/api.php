@@ -26,4 +26,5 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
     });
 
     require __DIR__ . '/../routes/v1/transaction.php';
+    require __DIR__ . '/../routes/v1/product.php';
 });

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Exceptio\Handler;
+use GuzzleHttp\Exception\RequestException;
 use App\Traits\ResponseService;
 use App\Service\ProductService;
 
@@ -17,10 +19,14 @@ class ProductController extends Controller
 		$this->productService = $productService;
 	}
 
-	public function data(Request $request)
+	public function priceList(Request $request)
 	{
-		$response = $this->productService->data($request);
-		$data = json_decode($response->getBody())->data;
-		return $this->success(['data' => $data]);
+		try {
+			$response = $this->productService->priceList($request);
+			$data = json_decode($response->getBody())->data;
+			return $this->success(['data' => ['count' => count($data), 'results' => $data]]);
+		} catch (RequestException $err) {
+			return $this->serverError(['message' => $err->getMessage()]);
+		}
 	}
 }

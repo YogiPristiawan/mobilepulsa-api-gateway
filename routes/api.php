@@ -17,10 +17,13 @@
 //     return $router->app->version();
 // });
 
-$router->group(['prefix' => 'api'], function () use ($router) {
-    $router->post('register', 'AuthController@register');
 
-    $router->group(['prefix' => 'transaction'], function () use ($router) {
-        $router->get('balance', 'TransactionController@balance');
+$router->group(['prefix' => 'v1'], function () use ($router) {
+
+    $router->group(['prefix' => 'auth'], function () use ($router) {
+        $router->post('register', 'AuthController@register');
+        $router->post('login', 'AuthController@login');
     });
+
+    require __DIR__ . '/../routes/v1/transaction.php';
 });

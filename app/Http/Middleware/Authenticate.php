@@ -4,9 +4,13 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use App\Helpers\Helper;
+use App\Traits\ResponseService;
+use Firebase\JWT\JWT;
 
 class Authenticate
 {
+    use ResponseService;
     /**
      * The authentication guard factory instance.
      *
@@ -33,12 +37,22 @@ class Authenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
+        if ($request->header('Authorization')) {
+            try {
+                if (Helper::decodeJwt($request->header('Authorization'))) {
+                    return $next($request);
+                };
+            } catch (\Exception $err) {
+                return $this->unauthorized([
+                    'message' => $err->getMessage()
+                ]);
+            }
         }
 
-        return $next($request);
+        return $this->unauthorized([
+            'message' => 'Insert token.'
+        ]);
     }
 }

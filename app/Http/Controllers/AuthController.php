@@ -3,43 +3,71 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Authentication;
+use App\Helpers\Helper;
+use App\Traits\ResponseService;
 
 class AuthController extends Controller
 {
+	use ResponseService;
+
+	public function __construct()
+	{
+		$this->middleware('auth', ['except' => ['register', 'login']]);
+	}
+
 	public function register(Request $request)
 	{
-		$user = new User;
+		$validator = Validator::make(
+			$request->only(['email', 'password']),
+			[
+				'email' => ['required', 'unique:users'],
+				'password' => ['required']
+			]
+		);
+		if ($validator->fails()) return $this->badRequest(['message' => $validator->errors()->all()]);
 
-		$this->validate($request, [
-			'username' => ['required', 'unique:App\Models\User,username'],
-			'email' => ['required', 'unique:App\Models\User,email'],
-			'password' => ['required']
-		]);
 		try {
+			$user = User::create([
+				'email' => $request->input('email'),
+				'password' => Hash::make($request->input('password'))
+			]);
 
-			$user->username = $request->input('username');
-			$user->email = $request->input('email');
-			$user->password = Crypt::encrypt($request->input('password'));
-			$user->save();
-			return response()->json([
-				'status' => [
-					'code' => 201,
-					'message' => 'User registered'
-				],
-				'user' => [
-					'username' => $request->input('username'),
-					'email' => $request->input('email')
-				]
-			], 201);
-		} catch (\Exception $e) {
-			return response()->json([
-				'status' => [
-					'code' => 500,
-					'message' => 'Server Error'
-				]
-			], 500);
+			return $this->success([
+				'data' => ['email' => $user->email]
+			]);
+		} catch (\Exception $err) {
+
+			return $this->serverError(['message' => $err->getMessage()]);
 		}
+	}
+
+	public function login(Request $request)
+	{
+		$user = User::where('email', $request->input('email'))->first();
+		if ($user && Hash::check($request->input('password'), $user->password)) {
+			$iat = time();
+			$exp = strtotime('+24 hours', $iat);
+			$token = Helper::generateJwt([
+				'iss'   => url('/'),
+				'iat'   => $iat,
+				'exp'   => $exp,
+				'email' => $user->email
+			]);
+
+			return $this->success([
+				'data' => [
+					'user_id' => $user->id,
+					'token'  => $token
+				]
+			]);
+		}
+
+		return $this->unauthorized([
+			'message' => 'Email or Password wrong.'
+		]);
 	}
 }

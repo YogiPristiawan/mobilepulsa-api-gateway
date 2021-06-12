@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Exception\RequestException;
-use App\Service\TransactionService;
+use App\Service\MobilePulsa\TransactionService;
 use App\Traits\ResponseService;
 
 class TransactionController extends Controller

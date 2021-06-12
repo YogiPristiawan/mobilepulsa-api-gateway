@@ -28,7 +28,7 @@ class ProductController extends Controller
 			return $this->success(['data' => ['count' => count($data), 'results' => $data]]);
 		} catch (RequestException $err) {
 
-			return $this->serverError(['message' => $err->getMessage()]);
+			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
 		}
 	}
 }

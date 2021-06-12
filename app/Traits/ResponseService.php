@@ -36,6 +36,7 @@ trait ResponseService
 		return response()->json($response, 401);
 	}
 
+
 	public function serverError(array $response = [])
 	{
 		$response['message'] = $response['message'] ?? 'Server Error';

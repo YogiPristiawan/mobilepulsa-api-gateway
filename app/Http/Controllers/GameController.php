@@ -45,7 +45,14 @@ class GameController extends Controller
 
 	public function serverList(Request $request)
 	{
-		if (!$request->query('game-code')) return $this->badRequest(['message' => 'Game code is required.']);
+		$validator = Validator::make(
+			$request->only(['game_code']),
+			[
+				'game_code' => ['required']
+			]
+		);
+
+		if ($validator->fails()) return $this->badRequest(['message' => 'Game code is required.']);
 
 		try {
 			$response = $this->gameService->serverList($request);

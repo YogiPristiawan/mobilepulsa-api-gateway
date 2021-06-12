@@ -43,7 +43,7 @@ class GameService
 
 	public function serverList(Request $request)
 	{
-		$game_code = $request->query('game-code');
+		$game_code = $request->input('game_code');
 
 		$sign = md5($this->username . $this->apiKey . $game_code);
 

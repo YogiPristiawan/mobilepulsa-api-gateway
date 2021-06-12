@@ -55,4 +55,22 @@ class TransactionService
 
 		return $response;
 	}
+
+	public function status(Request $request)
+	{
+		$ref_id = $request->input('ref_id');
+
+		$sign = md5($this->username . $this->apiKey . $ref_id);
+
+		$response = $this->post($this->base_uri, [
+			'json' => [
+				'commands' => 'inquiry',
+				'username' => $this->username,
+				'ref_id' => $ref_id,
+				'sign' => $sign
+			]
+		]);
+
+		return $response;
+	}
 }

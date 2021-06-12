@@ -55,4 +55,25 @@ class TransactionController extends Controller
 			return $this->serverError(['message' => $err->getMessage()]);
 		}
 	}
+
+	public function status(Request $request)
+	{
+		$validator = Validator::make(
+			$request->only(['ref_id']),
+			[
+				'ref_id' => ['required']
+			]
+		);
+
+		if ($validator->fails()) return $this->badRequest(['message' => $validator->errors()->all()]);
+		try {
+			$response = $this->transactionService->status($request);
+			$data = json_decode($response->getBody())->data;
+
+			return $this->success(['data' => $data]);
+		} catch (RequestException $err) {
+
+			return $this->serverError(['message' => $err->getMessage()]);
+		}
+	}
 }

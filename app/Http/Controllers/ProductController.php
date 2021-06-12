@@ -24,8 +24,10 @@ class ProductController extends Controller
 		try {
 			$response = $this->productService->priceList($request);
 			$data = json_decode($response->getBody())->data;
+
 			return $this->success(['data' => ['count' => count($data), 'results' => $data]]);
 		} catch (RequestException $err) {
+
 			return $this->serverError(['message' => $err->getMessage()]);
 		}
 	}

@@ -31,12 +31,14 @@ class GameController extends Controller
 		);
 
 		if ($validator->fails()) return $this->badRequest(['message' => $validator->errors()->all()]);
+
 		try {
 			$response = $this->gameService->checkId($request);
 			$data = json_decode($response->getBody())->data;
 
 			return $this->success(['data' => $data]);
 		} catch (RequestException $err) {
+
 			return $this->serverError(['message' => $err->getMessage()]);
 		}
 	}
@@ -51,6 +53,7 @@ class GameController extends Controller
 
 			return $this->success(['data' => $data]);
 		} catch (RequestException $err) {
+
 			return $this->serverError(['message' => $err->getMessage()]);
 		}
 	}

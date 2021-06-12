@@ -11,7 +11,6 @@ class TransactionService
 
 	protected $base_uri;
 	protected $username;
-	protected $sign;
 	protected $apiKey;
 
 	public function __construct()
@@ -19,16 +18,17 @@ class TransactionService
 		$this->base_uri = config('mobilepulsa.prepaidUrl');
 		$this->username = config('mobilepulsa.username');
 		$this->apiKey = config('mobilepulsa.apiKey');
-		$this->sign = md5(config('mobilepulsa.username') . config('mobilepulsa.apiKey') . 'bl');
 	}
 
 	public function balance()
 	{
+		$sign = md5($this->username . $this->apiKey . 'bl');
+
 		$response = $this->post($this->base_uri, [
 			'json' => [
 				'commands' => 'balance',
 				'username' => $this->username,
-				'sign'	   => $this->sign
+				'sign'	   => $sign
 			]
 		]);
 		return $response;

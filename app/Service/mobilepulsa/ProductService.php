@@ -14,17 +14,19 @@ class ProductService
 
 	protected $base_uri;
 	protected $username;
-	protected $sign;
+	protected $apiKey;
 
 	public function __construct()
 	{
 		$this->base_uri = config('mobilepulsa.prepaidUrl');
 		$this->username = config('mobilepulsa.username');
-		$this->sign 	= md5(config('mobilepulsa.username') . config('mobilepulsa.apiKey') . 'pl');
+		$this->apiKey = config('mobilepulsa.apiKey');
 	}
 
 	public function priceList(Request $request)
 	{
+		$sign = md5($this->username . $this->apiKey . 'pl');
+
 		$type = $request->query('type');
 		$operator = $request->query('operator');
 		$status = $request->query('status', 'all');
@@ -39,7 +41,7 @@ class ProductService
 			'json' => [
 				'commands' => 'pricelist',
 				'username' => $this->username,
-				'sign' 	   => $this->sign,
+				'sign' 	   => $sign,
 				'status'   => $status
 			]
 		]);

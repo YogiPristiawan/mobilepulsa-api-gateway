@@ -4,10 +4,10 @@ namespace App\Traits;
 
 trait ResponseService
 {
-	public function success(array $data = [])
+	public function success(array $response = [])
 	{
-		$response['message'] = $data['message'] ?? 'Success';
-		if (isset($data['data'])) $response['data'] = $data['data'];
+		$response['message'] = $response['message'] ?? 'Success';
+		if (isset($data['data'])) $response['data'] = $response['data'];
 
 		return response()->json($response, 200);
 	}
@@ -36,6 +36,13 @@ trait ResponseService
 		return response()->json($response, 401);
 	}
 
+	public function notFound(array $response = [])
+	{
+		$response['message'] = $response['message'] ?? 'Unauthorized';
+		if (isset($data['data'])) $response['data'] = $data['data'];
+
+		return response()->json($response, 404);
+	}
 
 	public function serverError(array $response = [])
 	{

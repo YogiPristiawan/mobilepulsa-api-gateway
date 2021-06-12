@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Exceptio\Handler;
 use GuzzleHttp\Exception\RequestException;
 use App\Traits\ResponseService;
-use App\Service\MobilePulsa\ProductService;
+use App\Services\MobilePulsa\ProductService;
 
 class ProductController extends Controller
 {

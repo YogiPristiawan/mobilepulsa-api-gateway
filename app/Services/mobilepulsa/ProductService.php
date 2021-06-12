@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\MobilePulsa;
+namespace App\Services\MobilePulsa;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Exception\InvalidArgumentException;

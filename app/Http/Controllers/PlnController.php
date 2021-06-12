@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Service\MobilePulsa\PlnService;
+use App\Services\MobilePulsa\PlnService;
 use App\Traits\ResponseService;
 
 class PlnController extends Controller

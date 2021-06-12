@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ResponseService;
-use App\Service\MobilePulsa\GameService;
+use App\Services\MobilePulsa\GameService;
 use GuzzleHttp\Exception\RequestException;
 
 class GameController extends Controller

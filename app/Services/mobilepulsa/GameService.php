@@ -3,22 +3,16 @@
 namespace App\Services\MobilePulsa;
 
 use Illuminate\Http\Request;
+use App\Services\BaseService;
 use App\Traits\RequestService;
 
-class GameService
+class GameService extends BaseService
 {
 	use RequestService;
 
-	protected $base_uri;
-	protected $username;
-	protected $apiKey;
-	protected $sign;
-
 	public function __construct()
 	{
-		$this->base_uri = config('mobilepulsa.prepaidUrl');
-		$this->username = config('mobilepulsa.username');
-		$this->apiKey = config('mobilepulsa.apiKey');
+		parent::__construct();
 	}
 
 	public function checkId(Request $request)
@@ -38,7 +32,9 @@ class GameService
 			]
 		]);
 
-		return $response;
+		$data = json_decode($response->getBody())->data;
+
+		return $data;
 	}
 
 	public function serverList(Request $request)
@@ -56,6 +52,8 @@ class GameService
 			]
 		]);
 
-		return $response;
+		$data = json_decode($response->getBody())->data;
+
+		return $data;
 	}
 }

@@ -3,24 +3,18 @@
 namespace App\Services\MobilePulsa;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Exception\InvalidArgumentException;
+use App\Services\BaseService;
 use App\Traits\RequestService;
 use App\Traits\ResponseService;
 
 
-class ProductService
+class ProductService extends BaseService
 {
 	use RequestService, ResponseService;
 
-	protected $base_uri;
-	protected $username;
-	protected $apiKey;
-
 	public function __construct()
 	{
-		$this->base_uri = config('mobilepulsa.prepaidUrl');
-		$this->username = config('mobilepulsa.username');
-		$this->apiKey = config('mobilepulsa.apiKey');
+		parent::__construct();
 	}
 
 	public function priceList(Request $request)
@@ -46,6 +40,8 @@ class ProductService
 			]
 		]);
 
-		return $response;
+		$data = json_decode($response->getBody())->data;
+
+		return $data;
 	}
 }

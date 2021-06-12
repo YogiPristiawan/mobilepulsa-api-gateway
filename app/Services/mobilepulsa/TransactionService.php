@@ -3,21 +3,16 @@
 namespace App\Services\MobilePulsa;
 
 use Illuminate\Http\Request;
+use App\Services\BaseService;
 use App\Traits\RequestService;
 
-class TransactionService
+class TransactionService extends BaseService
 {
 	use RequestService;
 
-	protected $base_uri;
-	protected $username;
-	protected $apiKey;
-
 	public function __construct()
 	{
-		$this->base_uri = config('mobilepulsa.prepaidUrl');
-		$this->username = config('mobilepulsa.username');
-		$this->apiKey = config('mobilepulsa.apiKey');
+		parent::__construct();
 	}
 
 	public function balance()
@@ -31,7 +26,10 @@ class TransactionService
 				'sign'	   => $sign
 			]
 		]);
-		return $response;
+
+		$data = json_decode($response->getBody())->data;
+
+		return $data;
 	}
 
 	public function topUp(Request $request)
@@ -53,7 +51,9 @@ class TransactionService
 			]
 		]);
 
-		return $response;
+		$data = json_decode($response->getBody())->data;
+
+		return $data;
 	}
 
 	public function status(Request $request)
@@ -71,6 +71,8 @@ class TransactionService
 			]
 		]);
 
-		return $response;
+		$data = json_decode($response->getBody())->data;
+
+		return $data;
 	}
 }

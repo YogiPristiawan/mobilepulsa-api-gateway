@@ -3,22 +3,17 @@
 namespace App\Services\MobilePulsa;
 
 use Illuminate\Http\Request;
+use App\Services\BaseService;
 use App\Traits\RequestService;
-use GuzzleHttp\Exception\RequestException;
+use App\Exceptions\BadRequestException;
 
-class PlnService
+class PlnService extends BaseService
 {
 	use RequestService;
 
-	protected $base_uri;
-	protected $username;
-	protected $apiKey;
-
 	public function __construct()
 	{
-		$this->base_uri = config('mobilepulsa.prepaidUrl');
-		$this->username = config('mobilepulsa.username');
-		$this->apiKey = config('mobilepulsa.apiKey');
+		parent::__construct();
 	}
 
 	public function subscriberCheck(Request $request)
@@ -36,6 +31,12 @@ class PlnService
 			]
 		]);
 
-		return $response;
+		$data = json_decode($response->getBody())->data;
+
+		if (isset($data->rc)) {
+			if (!in_array($data->rc, $this->notFailedResponse)) throw new BadRequestException($data->message);
+		}
+
+		return $data;
 	}
 }

@@ -25,9 +25,8 @@ class TransactionController extends Controller
 	{
 		try {
 			$response = $this->transactionService->balance();
-			$data = json_decode($response->getBody())->data;
 
-			return $this->success(['data' => $data]);
+			return $this->success(['data' => $response]);
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
@@ -49,9 +48,8 @@ class TransactionController extends Controller
 
 		try {
 			$response = $this->transactionService->topUp($request);
-			$data = json_decode($response->getBody())->data;
 
-			return $this->success(['data' => $data]);
+			return $this->success(['data' => $response]);
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
@@ -70,9 +68,8 @@ class TransactionController extends Controller
 		if ($validator->fails()) return $this->badRequest(['message' => $validator->errors()->all()]);
 		try {
 			$response = $this->transactionService->status($request);
-			$data = json_decode($response->getBody())->data;
 
-			return $this->success(['data' => $data]);
+			return $this->success(['data' => $response]);
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());

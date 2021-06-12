@@ -32,9 +32,8 @@ class PlnController extends Controller
 
 		try {
 			$response = $this->plnService->subscriberCheck($request);
-			$data = json_decode($response->getBody())->data;
 
-			return $this->success(['data' => $data]);
+			return $this->success(['data' => $response]);
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());

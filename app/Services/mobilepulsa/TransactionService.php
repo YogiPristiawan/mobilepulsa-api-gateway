@@ -3,6 +3,7 @@
 namespace App\Services\MobilePulsa;
 
 use Illuminate\Http\Request;
+use App\Exceptions\BadRequestException;
 use App\Services\BaseService;
 use App\Traits\RequestService;
 
@@ -29,6 +30,10 @@ class TransactionService extends BaseService
 
 		$data = json_decode($response->getBody())->data;
 
+		if (isset($data->rc)) {
+			if (!in_array($data->rc, $this->notFailedResponse)) throw new BadRequestException($data->message);
+		}
+
 		return $data;
 	}
 
@@ -53,6 +58,9 @@ class TransactionService extends BaseService
 
 		$data = json_decode($response->getBody())->data;
 
+		if (isset($data->rc)) {
+			if (!in_array($data->rc, $this->notFailedResponse)) throw new BadRequestException($data->message);
+		}
 		return $data;
 	}
 
@@ -72,6 +80,10 @@ class TransactionService extends BaseService
 		]);
 
 		$data = json_decode($response->getBody())->data;
+
+		if (isset($data->rc)) {
+			if (!in_array($data->rc, $this->notFailedResponse)) throw new BadRequestException($data->message);
+		}
 
 		return $data;
 	}

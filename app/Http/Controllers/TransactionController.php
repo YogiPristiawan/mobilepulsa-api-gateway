@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Exception\RequestException;
 use App\Exceptions\BadRequestException;
-use App\Exceptions\ServerErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Services\MobilePulsa\TransactionService;
@@ -30,6 +29,9 @@ class TransactionController extends Controller
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
+		} catch (BadRequestException $err) {
+
+			return $this->badRequest(['message' => $err->getMessage()]);
 		}
 	}
 
@@ -53,6 +55,9 @@ class TransactionController extends Controller
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
+		} catch (BadRequestException $err) {
+
+			return $this->badRequest(['message' => $err->getMessage()]);
 		}
 	}
 
@@ -73,6 +78,9 @@ class TransactionController extends Controller
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
+		} catch (BadRequestException $err) {
+
+			return $this->badRequest(['message' => $err->getMessage()]);
 		}
 	}
 }

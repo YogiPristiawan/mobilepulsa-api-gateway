@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Exceptions\BadRequestException;
 use App\Traits\ResponseService;
 use App\Services\MobilePulsa\GameService;
 use GuzzleHttp\Exception\RequestException;
@@ -39,6 +40,9 @@ class GameController extends Controller
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
+		} catch (BadRequestException $err) {
+
+			return $this->badRequest(['message' => $err->getMessage()]);
 		}
 	}
 
@@ -60,6 +64,9 @@ class GameController extends Controller
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
+		} catch (BadRequestException $err) {
+
+			return $this->badRequest(['message' => $err->getMessage()]);
 		}
 	}
 }

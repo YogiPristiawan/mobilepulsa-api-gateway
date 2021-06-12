@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Exceptions\BadRequestException;
 use App\Services\MobilePulsa\PlnService;
 use App\Traits\ResponseService;
 
@@ -37,6 +38,9 @@ class PlnController extends Controller
 		} catch (RequestException $err) {
 
 			return response()->json(['message' => $err->getMessage()], $err->getResponse()->getStatusCode());
+		} catch (BadRequestException $err) {
+
+			return $this->badRequest(['message' => $err->getMessage()]);
 		}
 	}
 }
